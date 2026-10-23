@@ -4,10 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#b06a32">
 <title>Order Slip — New Asia Stitching</title>
+<link rel="manifest" href="slip.webmanifest">
 <link rel="icon" href="favicon.ico" sizes="48x48"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
-:root{--bg:#faf5ee;--card:#fffaf2;--ink:#241a14;--mute:#6f5f53;--line:#e0d2bf;--cu:#b06a32;--gold:#d9a15f;--red:#b3203f}
+:root{--bg:#faf5ee;--card:#fffaf2;--ink:#241a14;--mute:#6f5f53;--line:#e0d2bf;--cu:#b06a32;--red:#b3203f}
 @media(prefers-color-scheme:dark){:root{--bg:#150f0c;--card:#1f1612;--ink:#f6ece0;--mute:#b9a795;--line:#3a2b22;--cu:#d08a4e}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:max(16px,env(safe-area-inset-top)) 16px max(32px,env(safe-area-inset-bottom))}
@@ -16,14 +18,20 @@ h1{font:700 26px Georgia,serif;margin:6px 0 2px}h2{font:700 20px Georgia,serif;m
 .sub{color:var(--mute);margin:0 0 18px;font-size:14px}
 form{display:grid;gap:12px}
 label{display:grid;gap:5px;font-size:14px;color:var(--mute)}
-input{font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;width:100%;min-height:48px}
-input:focus{border-color:var(--cu);outline:0}
+input,select{font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;width:100%;min-height:48px}
+input:focus,select:focus{border-color:var(--cu);outline:0}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.bal{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;background:var(--card);border:1.5px dashed var(--cu);font-weight:600}
-.bal b{font-size:22px;color:var(--cu)}
-.acts{display:grid;gap:10px;margin-top:4px}
+.r3{display:grid;grid-template-columns:1fr 1.3fr;gap:10px}
+.box{border:1.5px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:10px;background:var(--card)}
+.ln{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px dashed var(--line);font-size:15px}
+.ln button{min-height:36px;padding:0 12px;font-size:13px}
+.tot,.bal{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-weight:600}
+.bal{border:1.5px dashed var(--cu)}.bal b{font-size:22px;color:var(--cu)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{min-height:40px;padding:0 14px;font-size:14px}
 button,a.b{font:600 16px system-ui,sans-serif;min-height:48px;border-radius:999px;border:1.5px solid var(--cu);background:none;color:var(--ink);padding:0 18px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 .pri{background:var(--cu);color:#fff}.wa{background:#1fa855;border-color:#1fa855;color:#fff}
+.acts{display:grid;gap:10px;margin-top:4px}
 .err{color:var(--red);font-size:14px;min-height:1.2em;margin:0}
 .o{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
 .o.done{opacity:.55}
@@ -32,6 +40,7 @@ button,a.b{font:600 16px system-ui,sans-serif;min-height:48px;border-radius:999p
 .o .a{display:flex;flex-wrap:wrap;gap:8px}
 .o .a button,.o .a a.b{min-height:40px;font-size:14px;padding:0 14px}
 .empty{color:var(--mute);font-size:14px}
+.sum{color:var(--mute);font-size:14px;margin:0 0 10px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;opacity:0;transition:.3s;font-size:15px}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -39,21 +48,30 @@ button,a.b{font:600 16px system-ui,sans-serif;min-height:48px;border-radius:999p
 <body>
 <main>
 <h1>Order Slip</h1>
-<p class="sub">New Asia Stitching Studio — customer order, advance and delivery date. Sirf shop ke liye.</p>
+<p class="sub">New Asia Stitching Studio — order, rate, advance aur delivery date. Sirf shop ke liye.</p>
 
 <form id="f" autocomplete="off">
   <div class="r2">
-    <label>Customer name<input id="n" placeholder="Ahmed" required></label>
-    <label>Customer phone<input id="p" type="tel" inputmode="tel" placeholder="03xx xxxxxxx" required></label>
+    <label>Customer name<input id="n" placeholder="Ahmed"></label>
+    <label>Customer phone<input id="p" type="tel" inputmode="tel" placeholder="03xx xxxxxxx"></label>
   </div>
-  <label>Item<input id="i" list="items" placeholder="Suit stitching (plain)"></label>
-  <datalist id="items"></datalist>
-  <div class="r2">
-    <label>Quantity<input id="q" type="number" min="1" value="1" inputmode="numeric"></label>
-    <label>Total (Rs)<input id="t" type="number" min="0" inputmode="numeric" placeholder="1800"></label>
+
+  <div class="box">
+    <label>Item chunein<select id="it"></select></label>
+    <div class="r3">
+      <label>Quantity<input id="q" type="number" min="1" value="1" inputmode="numeric"></label>
+      <label>Rate (Rs) — zaroorat ho to badlein<input id="r" type="number" min="0" inputmode="numeric" placeholder="0"></label>
+    </div>
+    <button type="button" id="add">+ Item add karein</button>
+    <div id="lines"></div>
   </div>
+
+  <div class="tot"><span>Total</span><b id="tot">Rs 0</b></div>
+
+  <label>Advance (Rs)<input id="a" type="number" min="0" inputmode="numeric" placeholder="0"></label>
+  <div class="chips" id="chips"><button type="button" data-p="25">25%</button><button type="button" data-p="50">50%</button><button type="button" data-p="100">Poora</button><button type="button" data-p="0">Koi nahi</button></div>
   <div class="r2">
-    <label>Advance paid (Rs)<input id="a" type="number" min="0" inputmode="numeric" placeholder="0"></label>
+    <label>Advance kaise mila<select id="md"><option>Cash</option><option>JazzCash</option><option>Easypaisa</option><option>Other</option></select></label>
     <label>Delivery date<input id="d" type="date"></label>
   </div>
   <label>Note (optional)<input id="m" placeholder="Neck style, sleeves…"></label>
@@ -67,6 +85,7 @@ button,a.b{font:600 16px system-ui,sans-serif;min-height:48px;border-radius:999p
 </form>
 
 <h2>Recent orders</h2>
+<p class="sum" id="sum"></p>
 <div id="list"></div>
 </main>
 <div class="toast" id="toast"></div>
@@ -74,72 +93,92 @@ button,a.b{font:600 16px system-ui,sans-serif;min-height:48px;border-radius:999p
 <script>
 (function(){
 var SHOP='New Asia Stitching',PH='0333 5911646';
-var PRICES={'Gents: Suit stitching (plain)':1800,'Gents: Double stitching':2200,'Gents: Kali kurta':2500,'Gents: Kali kurta (with jali)':3500,'Gents: Shirt':1000,'Gents: Pancha jali':800,
-'Ladies: Suit stitching (plain)':1600,'Ladies: Lace piping suit':1800,'Ladies: Lining suit':2500,'Ladies: Lehnga set':6000,'Ladies: Saree set':5200,'Ladies: Fancy frock':5000,'Ladies: Maxi':4800,
-'Trouser / pant':0,'Alteration':0,'Uniform':0,'Fancy / custom design':0};
+/* Same rates as the website rate list. 0 = rate depends on the work, type it in. */
+var RATES=[
+ ['Gents','Suit stitching (plain)',1800],['Gents','Double stitching',2200],['Gents','Kali kurta',2500],['Gents','Kali kurta (with jali)',3500],['Gents','Shirt',1000],['Gents','Pancha jali',800],
+ ['Ladies','Suit stitching (plain)',1600],['Ladies','Lace piping suit',1800],['Ladies','Lining suit',2500],['Ladies','Lehnga set',6000],['Ladies','Saree set',5200],['Ladies','Fancy frock',5000],['Ladies','Maxi',4800],
+ ['Other','Trouser / pant',0],['Other','Alteration',0],['Other','Uniform',0],['Other','Fancy / custom design',0]];
 var $=function(id){return document.getElementById(id)};
-var dl=$('items');Object.keys(PRICES).forEach(function(k){var o=document.createElement('option');o.value=k;dl.appendChild(o)});
+var lines=[];
 
-function load(){try{return JSON.parse(localStorage.getItem('na_orders')||'[]')}catch(e){return []}}
+(function(){var s=$('it'),o=document.createElement('option');o.value='';o.textContent='— item chunein —';s.appendChild(o);
+ var g=null,gn='';RATES.forEach(function(x,i){if(x[0]!==gn){gn=x[0];g=document.createElement('optgroup');g.label=gn==='Other'?'Other (rate khud likhein)':gn;s.appendChild(g)}
+  var op=document.createElement('option');op.value=i;op.textContent=x[1]+(x[2]?' — Rs '+x[2].toLocaleString('en-US'):'');g.appendChild(op)})})();
+
+function load(){try{var a=JSON.parse(localStorage.getItem('na_orders')||'[]');return a.map(norm)}catch(e){return []}}
+function norm(o){if(!o.items)o.items=[{name:o.item||'Stitching',qty:o.qty||1,rate:Math.round((o.total||0)/(o.qty||1))}];if(typeof o.paid!=='number')o.paid=o.adv||0;return o}
 function store(a){try{localStorage.setItem('na_orders',JSON.stringify(a))}catch(e){toast('Save nahi hua — browser storage band hai')}}
 function seq(){var n=1;try{n=(+localStorage.getItem('na_seq')||0)+1;localStorage.setItem('na_seq',n)}catch(e){n=Date.now()%10000}return n}
 function num(v){v=parseFloat(v);return isFinite(v)&&v>0?v:0}
 function rs(n){return 'Rs '+Math.round(n).toLocaleString('en-US')}
-function fd(s){if(!s)return '';var x=s.split('-');var d=new Date(+x[0],+x[1]-1,+x[2]);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+function fd(s){if(!s)return '';var x=s.split('-');return new Date(+x[0],+x[1]-1,+x[2]).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
 function phone(v){var d=String(v).replace(/\D/g,'');if(d.indexOf('0092')===0)d=d.slice(2);if(d.indexOf('92')===0)return d;if(d.charAt(0)==='0')return '92'+d.slice(1);return d}
 function validPhone(v){return /^923\d{9}$/.test(phone(v))}
 function toast(t){var e=$('toast');e.textContent=t;e.classList.add('show');setTimeout(function(){e.classList.remove('show')},2200)}
+function total(ls){return ls.reduce(function(s,l){return s+l.qty*l.rate},0)}
+function itemsText(o){return o.items.map(function(l){return (l.qty>1?l.qty+' x ':'')+l.name}).join(', ')}
+function bal(o){return Math.max(0,o.total-o.paid)}
 
-function bal(){var b=num($('t').value)-num($('a').value);$('bal').textContent=rs(b>0?b:0)}
-function autoTotal(){var p=PRICES[$('i').value.trim()];if(p){$('t').value=p*Math.max(1,num($('q').value)||1)}bal()}
-$('i').addEventListener('change',autoTotal);$('q').addEventListener('input',autoTotal);$('t').addEventListener('input',bal);$('a').addEventListener('input',bal);
-var today=new Date();$('d').min=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+/* ---- form ---- */
+function refresh(){var t=total(lines);$('tot').textContent=rs(t);var b=t-num($('a').value);$('bal').textContent=rs(b>0?b:0)}
+function renderLines(){var box=$('lines');box.textContent='';
+ lines.forEach(function(l,i){var d=document.createElement('div');d.className='ln';var s=document.createElement('span');s.textContent=l.qty+' x '+l.name+' — '+rs(l.qty*l.rate);d.appendChild(s);
+  var b=document.createElement('button');b.type='button';b.textContent='Hatayein';b.addEventListener('click',function(){lines.splice(i,1);renderLines();refresh()});d.appendChild(b);box.appendChild(d)});refresh()}
+$('it').addEventListener('change',function(){var v=$('it').value;$('r').value=v===''?'':(RATES[+v][2]||'');if(v!==''&&!RATES[+v][2])$('r').focus()});
+function addLine(){var v=$('it').value;if(v==='')return true;var x=RATES[+v],q=Math.max(1,Math.round(num($('q').value))||1),r=num($('r').value);
+ if(!r){$('err').textContent='Is item ka rate likhein.';$('r').focus();return false}
+ lines.push({name:x[0]==='Other'?x[1]:x[0]+' '+x[1],qty:q,rate:r});$('it').value='';$('q').value=1;$('r').value='';$('err').textContent='';renderLines();return true}
+$('add').addEventListener('click',addLine);
+$('a').addEventListener('input',refresh);
+$('chips').addEventListener('click',function(e){var p=e.target.getAttribute&&e.target.getAttribute('data-p');if(p===null||p===undefined)return;var t=total(lines);if(!t){$('err').textContent='Pehle item add karein.';return}$('a').value=Math.round(t*(+p)/100/10)*10;$('err').textContent='';refresh()});
+var T=new Date();$('d').min=T.getFullYear()+'-'+String(T.getMonth()+1).padStart(2,'0')+'-'+String(T.getDate()).padStart(2,'0');
 
-function slipMsg(o,multi){
- var item=(o.qty>1?o.qty+' x ':'')+o.item, nl=multi?'\n':' ';
- var lines=[SHOP+', Chakwal','Slip #'+o.no,'Assalam o Alaikum '+o.name+'!','Order: '+item,'Total: '+rs(o.total)+', Advance: '+rs(o.adv)+', Baqi: '+rs(o.total-o.adv>0?o.total-o.adv:0)];
- if(o.date)lines.push('Delivery: '+fd(o.date));
- if(o.note)lines.push('Note: '+o.note);
- lines.push('Order 15 din ke andar wasool kar lein. Shukriya. '+PH);
- return lines.join(nl);
-}
-function readyMsg(o){var b=Math.max(0,o.total-o.adv);
- return SHOP+', Chakwal. '+o.name+', aap ka order (Slip #'+o.no+') tayar hai. '+(b>0?'Baqi '+rs(b)+' le kar tashreef layen.':'Koi baqi raqam nahi, aa kar le jayen.')+' '+PH}
-function smsLink(o,body){return 'sms:+'+phone(o.phone)+'?&body='+encodeURIComponent(body)}
-function waLink(o,body){return 'https://wa.me/'+phone(o.phone)+'?text='+encodeURIComponent(body)}
+/* ---- messages ---- */
+function slipMsg(o,multi){var nl=multi?'\n':' ',adv=o.adv>0?' ('+o.mode+')':'';
+ var L=[SHOP+', Chakwal','Slip #'+o.no,'Assalam o Alaikum '+o.name+'!','Order: '+itemsText(o),'Total: '+rs(o.total)+', Advance: '+rs(o.adv)+adv+', Baqi: '+rs(bal(o))];
+ if(o.date)L.push('Delivery: '+fd(o.date));if(o.note)L.push('Note: '+o.note);
+ L.push('Order 15 din ke andar wasool kar lein. Shukriya. '+PH);return L.join(nl)}
+function readyMsg(o){var b=bal(o);return SHOP+', Chakwal. '+o.name+', aap ka order (Slip #'+o.no+') tayar hai. '+(b>0?'Baqi '+rs(b)+' le kar tashreef layen.':'Koi baqi raqam nahi, aa kar le jayen.')+' '+PH}
+function smsLink(o,b){return 'sms:+'+phone(o.phone)+'?&body='+encodeURIComponent(b)}
+function waLink(o,b){return 'https://wa.me/'+phone(o.phone)+'?text='+encodeURIComponent(b)}
 
+/* ---- save / send ---- */
 function read(){
- var o={name:$('n').value.trim(),phone:$('p').value.trim(),item:$('i').value.trim()||'Stitching',qty:Math.max(1,Math.round(num($('q').value))||1),total:num($('t').value),adv:num($('a').value),date:$('d').value,note:$('m').value.trim()};
- var e='';
+ if(!addLine())return null;
+ var o={name:$('n').value.trim(),phone:$('p').value.trim(),items:lines.slice(),adv:num($('a').value),mode:$('md').value,date:$('d').value,note:$('m').value.trim()};
+ o.total=total(o.items);o.paid=o.adv;var e='';
  if(!o.name)e='Customer ka naam likhein.';
  else if(!validPhone(o.phone))e='Phone number sahi likhein (03xx xxxxxxx).';
- else if(!o.total)e='Total raqam likhein.';
+ else if(!o.items.length)e='Kam az kam ek item add karein.';
  else if(o.adv>o.total)e='Advance total se zyada nahi ho sakta.';
  $('err').textContent=e;return e?null:o}
 function commit(o){o.no=seq();o.created=Date.now();o.done=false;var a=load();a.unshift(o);store(a.slice(0,100));render();return o}
-function reset(){$('f').reset();$('q').value=1;bal()}
-
+function reset(){$('f').reset();lines=[];$('q').value=1;renderLines()}
 $('save').addEventListener('click',function(){var o=read();if(!o)return;commit(o);reset();toast('Slip #'+o.no+' save ho gayi')});
 $('sms').addEventListener('click',function(){var o=read();if(!o)return;commit(o);var l=smsLink(o,slipMsg(o,false));reset();location.href=l});
 $('wa').addEventListener('click',function(){var o=read();if(!o)return;commit(o);var l=waLink(o,slipMsg(o,true));reset();window.open(l,'_blank')||(location.href=l)});
 
-function btn(t,cls,fn){var b=document.createElement('button');b.type='button';b.textContent=t;if(cls)b.className=cls;b.addEventListener('click',fn);return b}
+/* ---- orders list ---- */
+function btn(t,fn){var b=document.createElement('button');b.type='button';b.textContent=t;b.addEventListener('click',fn);return b}
 function render(){
  var box=$('list'),a=load();box.textContent='';
+ var owed=a.reduce(function(s,o){return s+bal(o)},0),cnt=a.filter(function(o){return bal(o)>0}).length;
+ $('sum').textContent=a.length?('Abhi tak baqi raqam: '+rs(owed)+' ('+cnt+' orders)'):'';
  if(!a.length){var e=document.createElement('p');e.className='empty';e.textContent='Abhi koi order save nahi hua.';box.appendChild(e);return}
  a.forEach(function(o,idx){
   var c=document.createElement('div');c.className='o'+(o.done?' done':'');
-  var t=document.createElement('div');t.className='t';var l=document.createElement('span');l.textContent='#'+o.no+' · '+o.name;var r=document.createElement('span');r.textContent=rs(Math.max(0,o.total-o.adv))+' baqi';t.appendChild(l);t.appendChild(r);
-  var m=document.createElement('div');m.className='m';m.textContent=(o.qty>1?o.qty+' x ':'')+o.item+(o.date?' · Delivery '+fd(o.date):'')+(o.done?' · Delivered':'');
+  var t=document.createElement('div');t.className='t';var l=document.createElement('span');l.textContent='#'+o.no+' · '+o.name;var r=document.createElement('span');r.textContent=bal(o)>0?rs(bal(o))+' baqi':'Paid ✓';t.appendChild(l);t.appendChild(r);
+  var m=document.createElement('div');m.className='m';m.textContent=itemsText(o)+' · Total '+rs(o.total)+(o.date?' · Delivery '+fd(o.date):'')+(o.done?' · Delivered':'');
   var ac=document.createElement('div');ac.className='a';
   var rd=document.createElement('a');rd.className='b';rd.href=smsLink(o,readyMsg(o));rd.textContent='Tayar hai — SMS';
   var w=document.createElement('a');w.className='b';w.target='_blank';w.rel='noopener';w.href=waLink(o,readyMsg(o));w.textContent='WhatsApp';
   ac.appendChild(rd);ac.appendChild(w);
-  ac.appendChild(btn(o.done?'Undo':'Delivered ✓','',function(){var x=load();x[idx].done=!x[idx].done;store(x);render()}));
-  ac.appendChild(btn('Delete','',function(){if(confirm('Slip #'+o.no+' delete karein?')){var x=load();x.splice(idx,1);store(x);render()}}));
+  if(bal(o)>0)ac.appendChild(btn('Payment mili',function(){var v=num(prompt('Kitni raqam mili? (baqi '+rs(bal(o))+')',bal(o)));if(!v)return;var x=load();x[idx].paid=Math.min(x[idx].total,x[idx].paid+v);store(x);render();toast('Payment likh li')}));
+  ac.appendChild(btn(o.done?'Undo':'Delivered ✓',function(){var x=load();x[idx].done=!x[idx].done;store(x);render()}));
+  ac.appendChild(btn('Delete',function(){if(confirm('Slip #'+o.no+' delete karein?')){var x=load();x.splice(idx,1);store(x);render()}}));
   c.appendChild(t);c.appendChild(m);c.appendChild(ac);box.appendChild(c)});
 }
-bal();render();
+renderLines();render();
 })();
 </script>
 </body>
